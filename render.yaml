@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: habilux-backend
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: JWT_SECRET
+        generate: true
+      - key: CLIENT_URL
+        sync: false
+      - key: NODE_ENV
+        value: production
