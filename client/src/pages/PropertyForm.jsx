@@ -83,7 +83,7 @@ export default function PropertyForm() {
                 image: null
             });
             if (property.image) {
-                setImagePreview(`http://localhost:3000${property.image}`);
+                setImagePreview(property.image.startsWith('http') ? property.image : `http://localhost:3000${property.image}`);
             }
         } catch (error) {
             console.error('Error loading property:', error);

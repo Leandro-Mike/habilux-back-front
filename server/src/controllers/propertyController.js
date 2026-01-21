@@ -137,7 +137,7 @@ const createProperty = async (req, res) => {
                 deedNumber,
                 propertyTypeId: parseInt(propertyTypeId),
                 rentValue: parseFloat(rentValue),
-                image: req.file ? `/uploads/properties/${req.file.filename}` : null
+                image: req.file ? (req.file.publicUrl || req.file.path || `/uploads/properties/${req.file.filename}`) : null
             },
             include: {
                 city: true,
@@ -184,7 +184,7 @@ const updateProperty = async (req, res) => {
         if (propertyTypeId) updateData.propertyTypeId = parseInt(propertyTypeId);
         if (rentValue) updateData.rentValue = parseFloat(rentValue);
         if (status) updateData.status = status;
-        if (req.file) updateData.image = `/uploads/properties/${req.file.filename}`;
+        if (req.file) updateData.image = req.file.publicUrl || req.file.path || `/uploads/properties/${req.file.filename}`;
 
         const property = await prisma.property.update({
             where: { id: parseInt(id) },

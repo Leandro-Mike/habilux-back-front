@@ -36,7 +36,7 @@ const ProfilePage = () => {
                 avatar: data.avatar || null,
             });
             if (data.avatar) {
-                setAvatarPreview(`http://localhost:3000${data.avatar}`);
+                setAvatarPreview(data.avatar.startsWith('http') ? data.avatar : `http://localhost:3000${data.avatar}`);
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -103,7 +103,7 @@ const ProfilePage = () => {
             });
 
             setProfile({ ...profile, avatar: data.avatar });
-            setAvatarPreview(`http://localhost:3000${data.avatar}`);
+            setAvatarPreview(data.avatar.startsWith('http') ? data.avatar : `http://localhost:3000${data.avatar}`);
             updateUser(data);
 
             setMessage({ type: 'success', text: 'Foto de perfil actualizada' });

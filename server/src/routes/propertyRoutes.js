@@ -14,9 +14,11 @@ const {
 router.get('/', protect, getAllProperties);
 router.get('/:id', protect, getPropertyById);
 
+const uploadToSupabase = require('../middleware/uploadToSupabase');
+
 // Rutas solo para ADMIN
-router.post('/', protect, adminOnly, uploadProperty.single('image'), createProperty);
-router.put('/:id', protect, adminOnly, uploadProperty.single('image'), updateProperty);
+router.post('/', protect, adminOnly, uploadProperty.single('image'), uploadToSupabase('properties'), createProperty);
+router.put('/:id', protect, adminOnly, uploadProperty.single('image'), uploadToSupabase('properties'), updateProperty);
 router.delete('/:id', protect, adminOnly, deleteProperty);
 
 module.exports = router;

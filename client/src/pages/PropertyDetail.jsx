@@ -56,7 +56,7 @@ export default function PropertyDetail() {
                     <div className="relative h-64 bg-gray-200">
                         {property.image ? (
                             <img
-                                src={`http://localhost:3000${property.image}`}
+                                src={property.image.startsWith('http') ? property.image : `http://localhost:3000${property.image}`}
                                 alt={property.title}
                                 className="w-full h-full object-cover"
                             />

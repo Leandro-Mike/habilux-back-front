@@ -8,7 +8,9 @@ const {
     deleteDocumentation
 } = require('../controllers/documentationController');
 
-router.post('/', protect, uploadDocumentation.single('file'), createDocumentation);
+const uploadToSupabase = require('../middleware/uploadToSupabase');
+
+router.post('/', protect, uploadDocumentation.single('file'), uploadToSupabase('documentation'), createDocumentation);
 router.get('/', protect, getDocumentation);
 router.delete('/:id', protect, deleteDocumentation);
 

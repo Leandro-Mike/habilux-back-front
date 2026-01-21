@@ -81,7 +81,8 @@ const uploadAvatar = async (req, res) => {
         });
 
         // Delete old avatar file if exists
-        if (currentUser.avatar) {
+        // Delete old avatar file if exists (only if local)
+        if (currentUser.avatar && !currentUser.avatar.startsWith('http')) {
             const oldAvatarPath = path.join(__dirname, '../../uploads/avatars', path.basename(currentUser.avatar));
             if (fs.existsSync(oldAvatarPath)) {
                 fs.unlinkSync(oldAvatarPath);
@@ -89,7 +90,7 @@ const uploadAvatar = async (req, res) => {
         }
 
         // Update user with new avatar URL
-        const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        const avatarUrl = req.file.publicUrl || req.file.path || `/uploads/avatars/${req.file.filename}`;
         const user = await prisma.user.update({
             where: { id: req.user.id },
             data: { avatar: avatarUrl },
@@ -109,12 +110,9 @@ const uploadAvatar = async (req, res) => {
         res.json(user);
     } catch (error) {
         console.error(error);
-        // Delete uploaded file if database update fails
-        if (req.file) {
-            const filePath = path.join(__dirname, '../../uploads/avatars', req.file.filename);
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
+        // Delete uploaded file if database update fails (if local)
+        if (req.file && !req.file.path && fs.existsSync(req.file.path)) {
+            try { fs.unlinkSync(req.file.path); } catch (e) { }
         }
         res.status(500).json({ message: 'Server error' });
     }
@@ -129,7 +127,7 @@ const deleteAvatar = async (req, res) => {
             select: { avatar: true },
         });
 
-        if (currentUser.avatar) {
+        if (currentUser.avatar && !currentUser.avatar.startsWith('http')) {
             const avatarPath = path.join(__dirname, '../../uploads/avatars', path.basename(currentUser.avatar));
             if (fs.existsSync(avatarPath)) {
                 fs.unlinkSync(avatarPath);

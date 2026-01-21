@@ -203,7 +203,7 @@ export default function Properties() {
                                         <td className="px-6 py-4">
                                             {property.image ? (
                                                 <img
-                                                    src={`http://localhost:3000${property.image}`}
+                                                    src={property.image?.startsWith('http') ? property.image : `http://localhost:3000${property.image}`}
                                                     alt={property.title}
                                                     className="w-16 h-16 object-cover rounded"
                                                 />

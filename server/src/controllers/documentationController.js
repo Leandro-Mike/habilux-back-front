@@ -41,7 +41,7 @@ const createDocumentation = async (req, res) => {
         }
 
         const fileType = getFileType(file);
-        const fileUrl = `/uploads/documentation/${file.filename}`;
+        const fileUrl = file.publicUrl || file.path || `/uploads/documentation/${file.filename}`;
 
         console.log('Creating documentation for user:', userId, req.user.name);
 
@@ -157,7 +157,7 @@ const deleteDocumentation = async (req, res) => {
 
         // Delete file from filesystem
         const filePath = path.join(__dirname, '../../', doc.fileUrl);
-        if (fs.existsSync(filePath)) {
+        if (!doc.fileUrl.startsWith('http') && fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
         }
 

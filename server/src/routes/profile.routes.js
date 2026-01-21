@@ -7,7 +7,8 @@ const upload = require('../middleware/upload');
 // Profile routes (all protected)
 router.get('/me', protect, getProfile);
 router.put('/me', protect, updateProfile);
-router.post('/me/avatar', protect, upload.single('avatar'), uploadAvatar);
+const uploadToSupabase = require('../middleware/uploadToSupabase');
+router.post('/me/avatar', protect, upload.single('avatar'), uploadToSupabase('profiles'), uploadAvatar);
 router.delete('/me/avatar', protect, deleteAvatar);
 
 module.exports = router;
