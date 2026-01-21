@@ -18,7 +18,7 @@ Sigue estos pasos para poner tu servidor en línea usando la capa gratuita de Re
     *   **Name**: `habilux-backend` (o el nombre que quieras)
     *   **Root Directory**: `server`  <-- ¡IMPORTANTE!
     *   **Environment**: `Node`
-    *   **Build Command**: `npm install && npx prisma generate && npx prisma migrate deploy`
+    *   **Build Command**: `npm install && npx prisma generate && npx prisma db push`
     *   **Start Command**: `npm start`
     *   **Instance Type**: Free
 
