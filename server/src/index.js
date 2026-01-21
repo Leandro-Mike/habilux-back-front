@@ -61,6 +61,38 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-app.listen(PORT, () => {
+// Temporary Admin Init
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
+const prisma = new PrismaClient();
+
+const initAdmin = async () => {
+  try {
+    const email = 'sergioleandroramirez97@gmail.com';
+    const password = '003584Fyl#.#';
+    const exists = await prisma.user.findUnique({ where: { email } });
+    if (!exists) {
+      console.log('--- AUTO-CREATING ADMIN USER ---');
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      await prisma.user.create({
+        data: {
+          name: 'Sergio',
+          lastName: 'Ramirez',
+          email,
+          password: hashedPassword,
+          role: 'ADMIN',
+          status: 'APPROVED'
+        }
+      });
+      console.log('--- ADMIN USER CREATED SUCCESSFULLY ---');
+    }
+  } catch (e) {
+    console.error('Error init admin:', e);
+  }
+};
+
+app.listen(PORT, async () => {
+  await initAdmin();
   console.log(`Server running on port ${PORT}`);
 });
